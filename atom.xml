@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://secrul.github.io</id>
     <title>secrul</title>
-    <updated>2020-07-31T11:24:27.480Z</updated>
+    <updated>2020-08-03T12:44:13.906Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://secrul.github.io"/>
     <link rel="self" href="https://secrul.github.io/atom.xml"/>
@@ -10,6 +10,58 @@
     <logo>https://secrul.github.io/images/avatar.png</logo>
     <icon>https://secrul.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, secrul</rights>
+    <entry>
+        <title type="html"><![CDATA[KNN]]></title>
+        <id>https://secrul.github.io/post/knn/</id>
+        <link href="https://secrul.github.io/post/knn/">
+        </link>
+        <updated>2020-08-01T02:44:33.000Z</updated>
+        <summary type="html"><![CDATA[<p>k-nearest neighbors，最近的k个邻居。顾名思义，就是按照一定的距离计算公式(最常用的就是欧式距离)挑选距离待分类点最近的k个邻居，然后按照人以类聚，物以群分的观点，认为待分类点的类别就是k个邻居中数目最多的类别。<br>
+<img src="https://secrul.github.io/post-images/1596453667678.png" alt="" loading="lazy"><br>
+当k是3的时候，</p>
+<ol>
+<li>计算待分类点和所有点的距离(可以是欧式距离)</li>
+<li>挑选距离待分类点最近的3个邻居，分别是三角形、三角形、正方形。</li>
+<li>然后按照类别进行统计，一个正方形，两个三角形，将数目最多的类别即三角形赋予待分类点。<br>
+由此，我们就认为待分类点是三角形。<br>
+当k是5的时候，发现最近的5个邻居分别是三角形、三角形、正方形、正方形、正方形。正方形的数目最多，所以将待分类点划分为正方形。<br>
+发现不同的k对应着不同的分类结果，所以k的选择至关重要。一般是要从3开始递增尝试。为了避免两类数目相同，二分类取3，5，7......选出最佳的k值。</li>
+</ol>
+]]></summary>
+        <content type="html"><![CDATA[<p>k-nearest neighbors，最近的k个邻居。顾名思义，就是按照一定的距离计算公式(最常用的就是欧式距离)挑选距离待分类点最近的k个邻居，然后按照人以类聚，物以群分的观点，认为待分类点的类别就是k个邻居中数目最多的类别。<br>
+<img src="https://secrul.github.io/post-images/1596453667678.png" alt="" loading="lazy"><br>
+当k是3的时候，</p>
+<ol>
+<li>计算待分类点和所有点的距离(可以是欧式距离)</li>
+<li>挑选距离待分类点最近的3个邻居，分别是三角形、三角形、正方形。</li>
+<li>然后按照类别进行统计，一个正方形，两个三角形，将数目最多的类别即三角形赋予待分类点。<br>
+由此，我们就认为待分类点是三角形。<br>
+当k是5的时候，发现最近的5个邻居分别是三角形、三角形、正方形、正方形、正方形。正方形的数目最多，所以将待分类点划分为正方形。<br>
+发现不同的k对应着不同的分类结果，所以k的选择至关重要。一般是要从3开始递增尝试。为了避免两类数目相同，二分类取3，5，7......选出最佳的k值。</li>
+</ol>
+<!-- more -->
+<p><a href="https://github.com/secrul/knn">python代码</a><br>
+KNN缺点：</p>
+<ol>
+<li>懒惰学习，速度较慢</li>
+<li>计算过程中需要存储整个训练样本，需要较大存储空间</li>
+<li>由于需要计算两两的距离，不适用于海量数据</li>
+<li>性能易受不平衡数据影响<br>
+KNN优点：</li>
+<li>思想简单、易懂</li>
+<li>不需要参数</li>
+<li>没有训练过程</li>
+<li>分类精度高</li>
+</ol>
+<p>注意点</p>
+<ol>
+<li>一般来说，距离越近的点类别相同的可能性越大。因此在统计k个邻居类别的时候权重不要都是1，可以是距离的倒数，较近的点权重大。</li>
+<li>对于不平衡数据：增大少数类的权重，尝试出最佳的k值和权重</li>
+<li>样本点过多：直接删除样本、聚类两个角度来减少样本数目</li>
+<li>距离：可以是欧式距离、内积、夹角余弦等</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[XShell 6建立会话两个问题记录]]></title>
         <id>https://secrul.github.io/post/xshell-6-jian-li-hui-hua-liang-ge-wen-ti-ji-lu/</id>
