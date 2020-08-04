@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>XShell 6建立会话两个问题记录 | secrul</title>
+<title>数据不平衡分类 | secrul</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,10 +24,12 @@
 
 
 
-    <meta name="description" content="#1.The remote SSH server rejected X11 forwarding request.
-https://blog.csdn.net/wugenqiang/article/details/86554753
-#2./..." />
-    <meta name="keywords" content="服务器" />
+    <meta name="description" content="类别不平衡数据，如我现在正在做的医学图像分类，患病的正样本数据不足10%，用一般机器学习方法正确率可以达到90%多，但是正样本全部预测为了负样本。最常用的不平衡数据处理策略有五种：
+
+负样本下采样
+1.1随机下采样
+1.2在负样本中，取与最..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -102,31 +104,36 @@ https://blog.csdn.net/wugenqiang/article/details/86554753
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">XShell 6建立会话两个问题记录</h2>
-            <div class="post-date">2020-07-31</div>
+            <h2 class="post-title">数据不平衡分类</h2>
+            <div class="post-date">2020-08-03</div>
             
             <div class="post-content" v-pre>
-              <p>#1.The remote SSH server rejected X11 forwarding request.<br>
-https://blog.csdn.net/wugenqiang/article/details/86554753<br>
-#2./usr/bin/xauth: file /root/.Xauthority does not exist<br>
-https://www.cnblogs.com/chenjo/p/12709785.html</p>
+              <p>类别不平衡数据，如我现在正在做的医学图像分类，患病的正样本数据不足10%，用一般机器学习方法正确率可以达到90%多，但是正样本全部预测为了负样本。最常用的不平衡数据处理策略有五种：</p>
+<ol>
+<li>负样本下采样<br>
+1.1随机下采样<br>
+1.2在负样本中，取与最近3个正样本邻居均值距离最近的负样本<br>
+1.3在负样本中，取与所有正样本邻居均值距离最近的负样本<br>
+1.4取每一个正样本最近的三个负样本<br>
+1.5在负样本中，取与最近3个正样本邻居均值距离最远的负样本</li>
+<li>正样本上采样<br>
+1.1 随机复制正样本<br>
+1.2Synthetic Minority Oversampling Technique(SMOTE)：找到正样本点的k个正样本邻居，随机选择一个求线性平局点<br>
+1.3Borderline-SMOTE1：对于每个正样本求除其k个邻居(包括负样本)，统计邻居中正样本个数m，如果m=1，噪声点删除，m&lt;k/2进行smote扩展，m&gt;k/2忽略<br>
+1.4Borderline-SMOTE2：与Borderline-SMOTE2区别：对于m&lt;k/2的正样本点，从m个正样本挑出a比例点线性插值，从k-m个负样本点挑出1-a比例点线性插值</li>
+<li>更改损失评价函数，不要用正确率，<br>
+1.1F-score、Recall</li>
+<li>对于少数类可以增强权重</li>
+</ol>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://secrul.github.io/tag/kgebkl1-v/" class="tag">
-                    服务器
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://secrul.github.io/post/yi-zuo-biao-bian-huan/">
+                <a href="https://secrul.github.io/post/knn/">
                   <h3 class="post-title">
-                    一、坐标变换
+                    KNN
                   </h3>
                 </a>
               </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://secrul.github.io</id>
     <title>secrul</title>
-    <updated>2020-08-03T12:44:13.906Z</updated>
+    <updated>2020-08-04T13:07:02.673Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://secrul.github.io"/>
     <link rel="self" href="https://secrul.github.io/atom.xml"/>
@@ -10,6 +10,60 @@
     <logo>https://secrul.github.io/images/avatar.png</logo>
     <icon>https://secrul.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, secrul</rights>
+    <entry>
+        <title type="html"><![CDATA[经典神经网络]]></title>
+        <id>https://secrul.github.io/post/jing-dian-shen-jing-wang-luo/</id>
+        <link href="https://secrul.github.io/post/jing-dian-shen-jing-wang-luo/">
+        </link>
+        <updated>2020-08-04T02:28:45.000Z</updated>
+        <content type="html"><![CDATA[<p>深度学习也是刚刚入门，了解了一些经典网络的架构。但是我发现大部分网络都像千层饼一样，堆叠着基本的网络结构——卷积层、池化层、全连接层。如果网络的效果不好，那么就增加其层次的数目。下面记录一下几个经典的网络结构。<br>
+1.LeNet-5<br>
+<img src="https://secrul.github.io/post-images/1596525374299.png" alt="" loading="lazy"><br>
+Le-Net网络结构很简单，之所以经典，是因为它是典型千层饼式神经网络的鼻祖。提出是为了引用于手写数字识别，并获得了相比于机器学习方法更优的性能。<br>
+可以看到，LeNet-5之所以称为5，是因为它总共有5层含有需要学习参数的网络，即三个卷积层和两个全连接层。<br>
+<a href="https://github.com/secrul/handwritting">手写数字识别pytorch代码实现</a></p>
+<p>2.AlexNet<br>
+<img src="https://secrul.github.io/post-images/1596540246628.png" alt="" loading="lazy"><br>
+LeNet-5之所以经典，是因为开创了堆叠式神经网络架构，而AlexNe是在2012年的 ILSVRC比赛中取得了令人惊异的成绩，深度学习的优势也开始显现。与LeNet-5相比，AlexNet增大网络的深度到8层，有5层卷积核三层全连接，并没除了最后一个全连接层外每一层后面都有一个ReLu激活函数。因为卷积层和全连接层都是线性运算，为了拟合一些非线性的函数引入非线性函数。并且池化层改为重叠池化，即池化核和池化核之间有交叉，据说是抑制了过拟合。为了进一步抑制过拟合，还为了减少参数，加快运算速度，引入了dropout来随机删除参数。在论文中，作者强调了网络深度的必要性，这也导致了后来深度学习网络的深度越来越大。<br>
+<a href="https://github.com/secrul/dogs-vs-cats/blob/master/models/alexnet.py">dog-vs-cat分类pytorch实现</a><br>
+3.VGG<br>
+<img src="https://secrul.github.io/post-images/1596509560598.png" alt="" loading="lazy"><br>
+vgg有vgg-16和vgg-19两个版本，vgg-19多了黑色的三个卷积层，分别代表19层带参数的网络层和16层带网络参数层。vgg获得了2014年ILSVRC比赛的第二名，参数太多，计算太复杂。<br>
+4.GoogLeNet<br>
+2014年ILSVRC比赛的第一名，有22层，但是参数数目却是vgg的1/20，AlexNet的1/12。主要是赫布理论指出可以用一个系数结构来代替稠密的参数。由此提出dropout等方法来进行参数的稀疏化。但是计算机的硬件和软件不能很好地计算稀疏结构，这不仅不会加快计算速度，反而给计算机造成更大地压力。所有GoogleNet想能不能用一个稠密结构覆盖(作用上等价)稀疏结构。(背后的数学原理很迷，反正是找到了一个Inception结构经过重复可以覆盖稀疏结构)。<br>
+<img src="https://secrul.github.io/post-images/1596545550571.png" alt="" loading="lazy"><br>
+但是呢，计算量太大了，就又提出了1x1的卷积，先将图像的channels数目减少，再进行3x3和5x5的卷积，得到了第二版本的Inception。<br>
+<img src="https://secrul.github.io/post-images/1596545727104.png" alt="" loading="lazy"><br>
+最后暴力concat，重复9遍，深度达到了22层。<br>
+<img src="https://secrul.github.io/post-images/1596545876839.jpg" alt="" loading="lazy"><br>
+为了避免过拟合，在较浅的网络层有两个辅助分类器，也采用了重叠池化策略。最后不仅深度大，参数少，性能还好。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[数据不平衡分类]]></title>
+        <id>https://secrul.github.io/post/shu-ju-bu-ping-heng-fen-lei/</id>
+        <link href="https://secrul.github.io/post/shu-ju-bu-ping-heng-fen-lei/">
+        </link>
+        <updated>2020-08-03T12:48:26.000Z</updated>
+        <content type="html"><![CDATA[<p>类别不平衡数据，如我现在正在做的医学图像分类，患病的正样本数据不足10%，用一般机器学习方法正确率可以达到90%多，但是正样本全部预测为了负样本。最常用的不平衡数据处理策略有五种：</p>
+<ol>
+<li>负样本下采样<br>
+1.1随机下采样<br>
+1.2在负样本中，取与最近3个正样本邻居均值距离最近的负样本<br>
+1.3在负样本中，取与所有正样本邻居均值距离最近的负样本<br>
+1.4取每一个正样本最近的三个负样本<br>
+1.5在负样本中，取与最近3个正样本邻居均值距离最远的负样本</li>
+<li>正样本上采样<br>
+1.1 随机复制正样本<br>
+1.2Synthetic Minority Oversampling Technique(SMOTE)：找到正样本点的k个正样本邻居，随机选择一个求线性平局点<br>
+1.3Borderline-SMOTE1：对于每个正样本求除其k个邻居(包括负样本)，统计邻居中正样本个数m，如果m=1，噪声点删除，m&lt;k/2进行smote扩展，m&gt;k/2忽略<br>
+1.4Borderline-SMOTE2：与Borderline-SMOTE2区别：对于m&lt;k/2的正样本点，从m个正样本挑出a比例点线性插值，从k-m个负样本点挑出1-a比例点线性插值</li>
+<li>更改损失评价函数，不要用正确率，<br>
+1.1F-score、Recall</li>
+<li>对于少数类可以增强权重</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[KNN]]></title>
         <id>https://secrul.github.io/post/knn/</id>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>经典神经网络 | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1596546416765">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="深度学习也是刚刚入门，了解了一些经典网络的架构。但是我发现大部分网络都像千层饼一样，堆叠着基本的网络结构——卷积层、池化层、全连接层。如果网络的效果不好，那么就增加其层次的数目。下面记录一下几个经典的网络结构。
+1.LeNet-5
+
+Le-..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1596546416765" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">经典神经网络</h2>
+            <div class="post-date">2020-08-04</div>
+            
+            <div class="post-content" v-pre>
+              <p>深度学习也是刚刚入门，了解了一些经典网络的架构。但是我发现大部分网络都像千层饼一样，堆叠着基本的网络结构——卷积层、池化层、全连接层。如果网络的效果不好，那么就增加其层次的数目。下面记录一下几个经典的网络结构。<br>
+1.LeNet-5<br>
+<img src="https://secrul.github.io/post-images/1596525374299.png" alt="" loading="lazy"><br>
+Le-Net网络结构很简单，之所以经典，是因为它是典型千层饼式神经网络的鼻祖。提出是为了引用于手写数字识别，并获得了相比于机器学习方法更优的性能。<br>
+可以看到，LeNet-5之所以称为5，是因为它总共有5层含有需要学习参数的网络，即三个卷积层和两个全连接层。<br>
+<a href="https://github.com/secrul/handwritting">手写数字识别pytorch代码实现</a></p>
+<p>2.AlexNet<br>
+<img src="https://secrul.github.io/post-images/1596540246628.png" alt="" loading="lazy"><br>
+LeNet-5之所以经典，是因为开创了堆叠式神经网络架构，而AlexNe是在2012年的 ILSVRC比赛中取得了令人惊异的成绩，深度学习的优势也开始显现。与LeNet-5相比，AlexNet增大网络的深度到8层，有5层卷积核三层全连接，并没除了最后一个全连接层外每一层后面都有一个ReLu激活函数。因为卷积层和全连接层都是线性运算，为了拟合一些非线性的函数引入非线性函数。并且池化层改为重叠池化，即池化核和池化核之间有交叉，据说是抑制了过拟合。为了进一步抑制过拟合，还为了减少参数，加快运算速度，引入了dropout来随机删除参数。在论文中，作者强调了网络深度的必要性，这也导致了后来深度学习网络的深度越来越大。<br>
+<a href="https://github.com/secrul/dogs-vs-cats/blob/master/models/alexnet.py">dog-vs-cat分类pytorch实现</a><br>
+3.VGG<br>
+<img src="https://secrul.github.io/post-images/1596509560598.png" alt="" loading="lazy"><br>
+vgg有vgg-16和vgg-19两个版本，vgg-19多了黑色的三个卷积层，分别代表19层带参数的网络层和16层带网络参数层。vgg获得了2014年ILSVRC比赛的第二名，参数太多，计算太复杂。<br>
+4.GoogLeNet<br>
+2014年ILSVRC比赛的第一名，有22层，但是参数数目却是vgg的1/20，AlexNet的1/12。主要是赫布理论指出可以用一个系数结构来代替稠密的参数。由此提出dropout等方法来进行参数的稀疏化。但是计算机的硬件和软件不能很好地计算稀疏结构，这不仅不会加快计算速度，反而给计算机造成更大地压力。所有GoogleNet想能不能用一个稠密结构覆盖(作用上等价)稀疏结构。(背后的数学原理很迷，反正是找到了一个Inception结构经过重复可以覆盖稀疏结构)。<br>
+<img src="https://secrul.github.io/post-images/1596545550571.png" alt="" loading="lazy"><br>
+但是呢，计算量太大了，就又提出了1x1的卷积，先将图像的channels数目减少，再进行3x3和5x5的卷积，得到了第二版本的Inception。<br>
+<img src="https://secrul.github.io/post-images/1596545727104.png" alt="" loading="lazy"><br>
+最后暴力concat，重复9遍，深度达到了22层。<br>
+<img src="https://secrul.github.io/post-images/1596545876839.jpg" alt="" loading="lazy"><br>
+为了避免过拟合，在较浅的网络层有两个辅助分类器，也采用了重叠池化策略。最后不仅深度大，参数少，性能还好。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/shu-ju-bu-ping-heng-fen-lei/">
+                  <h3 class="post-title">
+                    数据不平衡分类
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
