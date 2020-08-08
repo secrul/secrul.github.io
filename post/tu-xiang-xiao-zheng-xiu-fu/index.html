@@ -1,77 +1,116 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://secrul.github.io</id>
-    <title>secrul</title>
-    <updated>2020-08-08T13:15:35.368Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://secrul.github.io"/>
-    <link rel="self" href="https://secrul.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://secrul.github.io/images/avatar.png</logo>
-    <icon>https://secrul.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, secrul</rights>
-    <entry>
-        <title type="html"><![CDATA[Gan——Generative Adversarial Nets]]></title>
-        <id>https://secrul.github.io/post/gan-generative-adversarial-nets/</id>
-        <link href="https://secrul.github.io/post/gan-generative-adversarial-nets/">
-        </link>
-        <updated>2020-08-08T08:55:40.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="gangenerative-adversarial-nets">Gan——Generative Adversarial Nets</h2>
-<ol>
-<li>生成模型：<br>
-什么是生成器模型：生成模型是一个用于描述数据集分布的一个概率模型。并且可以生成与真实数据类似的新数据。<br>
-产生器模型和判别器模型区别：<br>
-判别器：给一个数据x，判断x数据类别y的可能性，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>y</mi><mi mathvariant="normal">∣</mi><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P(y|x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">∣</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span><br>
-产生器：给出一个类别y，判断数据x的分布概率，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><mi>x</mi><mi mathvariant="normal">∣</mi><mi>y</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P(x|y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span><br>
-判别器已经很好了，为什么要提出产生器模型呢？原因有三：
-<ol>
-<li>单纯从理论上看，我们不能满足于对数据进行分类，而应该更全面的了解数据怎么产生的。<br>
-凡我不能创造的我就不能理解。——费曼</li>
-<li>对未来机器学习的发展有巨大帮助。如强化学习</li>
-<li>想要达到真正像人意义的只能，必须通过产生器。例如人可能想象出来三条腿的蛤蟆<br>
-产生器模型框架：</li>
-<li>一个数据集中的数据项x，经过可以映射到一个高维空间，并且在高维空间符合一个分布<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>P</mi><mrow><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi></mrow></msub></mrow><annotation encoding="application/x-tex">P_{data}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
-<li>产生器模型就是来模仿从高维空间到数据项x的映射函数，当完全拟合后，就可以产生好像来自数据的新数据<br>
-要求：1.新产生的数据要与数据集中的数据类似 2.新产生的数据不能是复制数据集中的数据<br>
-传统的生成模型损失函数一般是产生数据的均方误差等。<br>
-<img src="https://secrul.github.io/post-images/1596890854998.png" alt="" loading="lazy"></li>
-</ol>
-</li>
-<li>生成对抗网络<br>
-传统的生成模型性能反正性能不好.(论文中说什么由于最大似然等策略中难以估计的计算和难以利用分段线性单元的好处，不理解)。就创造性地提出用一个分类器来监督产生器的效果。<br>
-<img src="https://secrul.github.io/post-images/1596890867394.png" alt="" loading="lazy"><br>
-判别器开始也是性能很糟糕，和生成器一起训练。判别器的目标有两个，一是给真实数据高分，二是给生成器伪造的数据低分。而生成器的目标就只有一个——尽可能产生让判别器给高分的数据。<br>
-判别器的loss函数：<br>
-<img src="https://secrul.github.io/post-images/1596891278243.png" alt="" loading="lazy"><br>
-<img src="https://secrul.github.io/post-images/1596891285601.png" alt="" loading="lazy"><br>
-判别器就是一个二分类器，当数据来自真实数据集是判别器尽可能打高分，反之打低分。<br>
-<img src="https://secrul.github.io/post-images/1596891631176.png" alt="" loading="lazy"><br>
-而生成器尽量使得判别器分不出来真假数据，即损失函数越大越好。<br>
-接下来证明为什么判别器这样的loss函数最终给可以使得生成器产生的数据和真实数据的分布相同：<br>
-<img src="https://secrul.github.io/post-images/1596891285601.png" alt="" loading="lazy"><br>
-对于几何中离散的求和可以用积分表示：<br>
-<img src="https://secrul.github.io/post-images/1596891759560.png" alt="" loading="lazy"><br>
-改变后面一项的积分符号，要想积分最大，只需被积函数最大：<br>
-<img src="https://secrul.github.io/post-images/1596891882730.png" alt="" loading="lazy"><br>
-又因为训练判别器的时候生成器是固定不变的，也就是所产生的伪造数据的分布<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>P</mi><mi>g</mi></msub></mrow><annotation encoding="application/x-tex">P_g</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>是不变的，视为常数，就成为了D(x)的函数，求最值：<br>
-<img src="https://secrul.github.io/post-images/1596891989020.png" alt="" loading="lazy"><br>
-然后将结果带回到损失函数:<br>
-<img src="https://secrul.github.io/post-images/1596892015094.png" alt="" loading="lazy"><br>
-发现是JS散度，用于衡量两个分布的差异，当两个分布完全相同就是0.(divergence就是差异，不同的意思，可非要翻译成令人困惑的散度)。<br>
-注意：<br>
-生成器相比于判别器不能训练的太快，举个不恰当的例子，两个傻子，一个傻老师，一个傻学生，傻老师每天都在跟着答案自学，而学生只能跟着老师学。如果早期老师水平不高的时候学生每天都去上课，可能得到错误的知识。所以每k天上一次课就行，k是超参数。<br>
-<img src="https://secrul.github.io/post-images/1596892133837.png" alt="" loading="lazy"><br>
-这个第一代Gan，只能通过噪声获得数据，越来越多的Gan像雨后春笋一样。有的是输入文本产生相应的图片，有的对于视频操作。现在Gan作为一个基本网络应用到了各种各样的任务中。</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[图像校正、修复、填充]]></title>
-        <id>https://secrul.github.io/post/tu-xiang-xiao-zheng-xiu-fu/</id>
-        <link href="https://secrul.github.io/post/tu-xiang-xiao-zheng-xiu-fu/">
-        </link>
-        <updated>2020-08-07T12:07:36.000Z</updated>
-        <content type="html"><![CDATA[<p>几何失真：在许多实际图像采集处理过程中，图像中像素之间的空间关系会发生变化，简单说就是直线不直，圆形不圆，称之为几何失真或者几何畸变。<br>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>图像校正、修复、填充 | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1596892458702">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="几何失真：在许多实际图像采集处理过程中，图像中像素之间的空间关系会发生变化，简单说就是直线不直，圆形不圆，称之为几何失真或者几何畸变。
+
+
+原始场景中各个像素的位置关系和图片中像素的空间关系不一致。需要通过对坐标的几何变换来校正各个像素的位..." />
+    <meta name="keywords" content="图像处理" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1596892458702" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">图像校正、修复、填充</h2>
+            <div class="post-date">2020-08-07</div>
+            
+              <div class="feature-container" style="background-image: url('https://secrul.github.io/post-images/tu-xiang-xiao-zheng-xiu-fu.jfif')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>几何失真：在许多实际图像采集处理过程中，图像中像素之间的空间关系会发生变化，简单说就是直线不直，圆形不圆，称之为几何失真或者几何畸变。<br>
 <img src="https://secrul.github.io/post-images/1596802485620.jfif" alt="" loading="lazy"><br>
 <img src="https://secrul.github.io/post-images/1596802570894.jfif" alt="" loading="lazy"><br>
 原始场景中各个像素的位置关系和图片中像素的空间关系不一致。需要通过对坐标的几何变换来校正各个像素的位置，恢复原有的空间关系。几何失真校正工作包括：</p>
@@ -128,198 +167,83 @@ s(x, y)和t(x, y)分别代表着两个空间变换函数。当是线性失真的
 <li>传播纹理和结构信息：根据计算出的优先权值，选出权值最高的待填充图像块，然后从源区域选出图像块填充它。在选择源图像块的时候，要使两个图像块中已知像素的平方差最小。</li>
 <li>更新置信度：填充完毕后更新置信度C(p)</li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[戴尔linux命令行模式与图形界面互转]]></title>
-        <id>https://secrul.github.io/post/linux-ming-ling-xing-mo-shi-yu-tu-xing-jie-mian-hu-zhuan/</id>
-        <link href="https://secrul.github.io/post/linux-ming-ling-xing-mo-shi-yu-tu-xing-jie-mian-hu-zhuan/">
-        </link>
-        <updated>2020-08-05T12:00:53.000Z</updated>
-        <content type="html"><![CDATA[<ol>
-<li>图形界面到命令行：ctrl + Alt + F2，这里F2到F6都可以</li>
-<li>命令行到图形界面：ctrl + Alt + F1</li>
-<li>命令行前多了一个base，这是安装Anoconda配置/etc/profile所致，每次进入命令行要执行conda deactivate命令</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Resnet]]></title>
-        <id>https://secrul.github.io/post/dropout/</id>
-        <link href="https://secrul.github.io/post/dropout/">
-        </link>
-        <updated>2020-08-05T06:14:56.000Z</updated>
-        <content type="html"><![CDATA[<p>1</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Deep Sparse Rectiﬁer Neural Networks]]></title>
-        <id>https://secrul.github.io/post/deep-sparse-rectifier-neural-networks/</id>
-        <link href="https://secrul.github.io/post/deep-sparse-rectifier-neural-networks/">
-        </link>
-        <updated>2020-08-05T03:35:55.000Z</updated>
-        <content type="html"><![CDATA[<p><a href="http://proceedings.mlr.press/v15/glorot11a/glorot11a.pdf">原文</a><br>
-主要介绍了ReLu激活函数<br>
-先是从神经科学方面发现了人脑神经元只有1%-4%是激活的，引申到深度网络也可以进行稀疏化。而ReLu的可以将一些神经元置为0来实现稀疏化。但是过度的稀疏，会反而降低网络的性能。<br>
-<img src="https://secrul.github.io/post-images/1596607338427.png" alt="" loading="lazy"><br>
-神经科学发现，刺激低于一定阈值神经元不会响应。类比提出ReLu<br>
-<img src="https://secrul.github.io/post-images/1596607786450.png" alt="" loading="lazy"><br>
-softplus是ReLu的平滑版本。<br>
-稀疏性的优点：</p>
-<ol>
-<li>可以分离出关键特征，增加数据的鲁棒性</li>
-<li>数据的维度更随意，可以适应不同的精度</li>
-<li>更可能线性可分</li>
-<li>稠密分布包含着数据的主要特征，而稀疏数据来源于稠密数据，兼顾效率的同时也具备了上述优点<br>
-ReLu优势：</li>
-<li>相比于sigmoid和双边tanh，计算简单，并且稀疏了网络，并且不会出现梯度消失(sigmoid在无线大和无线小时会出现梯度消失)</li>
-<li>弥合了有预训练和没有预训练的差距，而sigmoid和双边tanh在没有预训练的模型中效果明显较差。在没有预训练时，ReLu性能相比优异。</li>
-<li>减少了监督学习和非监督学习的差距。</li>
-<li>0点处不能求导并不会导致不能后向传播降低性能，因为有L1正则化，所以也不会出现无穷大的神经元</li>
-</ol>
-<p>理想的稀疏率时50%~85%，超过85%会降低性能。<br>
-<strong>缺点</strong>：被置为0的神经元死亡后不会向后传递信息，且不会复活，即阻止了浅层信息向深层传播。<br>
-变体：</p>
-<ol>
-<li>Leaky ReLu 其中a是（1，+∞），人为指定，训练过程中不可以改变。这样避免了大部分神经元的死亡，也很难梯度爆炸<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&gt;0</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mi>x</mi><mi>a</mi></mfrac></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&lt;0</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">y = \begin{cases}
-x&amp; \text{x&gt;0}\\
-\frac{x}{a}&amp; \text{x&lt;0}
-\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&gt;0</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&lt;0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
-<li>PReLu<br>
-在Leaky ReLu基础上，a的值是根据数据来自动取的</li>
-<li>RReLu<br>
-在Leaky ReLU基础上，训练过程中a的值是一个从均匀分布(c,d)中随机取，测试中是一个定值</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[决策树]]></title>
-        <id>https://secrul.github.io/post/jue-ce-shu/</id>
-        <link href="https://secrul.github.io/post/jue-ce-shu/">
-        </link>
-        <updated>2020-08-04T13:23:03.000Z</updated>
-        <content type="html"><![CDATA[<ol>
-<li></li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[经典神经网络]]></title>
-        <id>https://secrul.github.io/post/jing-dian-shen-jing-wang-luo/</id>
-        <link href="https://secrul.github.io/post/jing-dian-shen-jing-wang-luo/">
-        </link>
-        <updated>2020-08-04T02:28:45.000Z</updated>
-        <content type="html"><![CDATA[<p>深度学习也是刚刚入门，了解了一些经典网络的架构。但是我发现大部分网络都像千层饼一样，堆叠着基本的网络结构——卷积层、池化层、全连接层。如果网络的效果不好，那么就增加其层次的数目。下面记录一下几个经典的网络结构。<br>
-1.LeNet-5<br>
-<img src="https://secrul.github.io/post-images/1596525374299.png" alt="" loading="lazy"><br>
-Le-Net网络结构很简单，之所以经典，是因为它是典型千层饼式神经网络的鼻祖。提出是为了引用于手写数字识别，并获得了相比于机器学习方法更优的性能。<br>
-可以看到，LeNet-5之所以称为5，是因为它总共有5层含有需要学习参数的网络，即三个卷积层和两个全连接层。<br>
-<a href="https://github.com/secrul/handwritting">手写数字识别pytorch代码实现</a></p>
-<p>2.AlexNet<br>
-<img src="https://secrul.github.io/post-images/1596540246628.png" alt="" loading="lazy"><br>
-LeNet-5之所以经典，是因为开创了堆叠式神经网络架构，而AlexNe是在2012年的 ILSVRC比赛中取得了令人惊异的成绩，深度学习的优势也开始显现。与LeNet-5相比，AlexNet增大网络的深度到8层，有5层卷积核三层全连接，并没除了最后一个全连接层外每一层后面都有一个ReLu激活函数。因为卷积层和全连接层都是线性运算，为了拟合一些非线性的函数引入非线性函数。并且池化层改为重叠池化，即池化核和池化核之间有交叉，据说是抑制了过拟合。为了进一步抑制过拟合，还为了减少参数，加快运算速度，引入了dropout来随机删除参数。在论文中，作者强调了网络深度的必要性，这也导致了后来深度学习网络的深度越来越大。<br>
-<a href="https://github.com/secrul/dogs-vs-cats/blob/master/models/alexnet.py">dog-vs-cat分类pytorch实现</a><br>
-3.VGG<br>
-<img src="https://secrul.github.io/post-images/1596509560598.png" alt="" loading="lazy"><br>
-vgg有vgg-16和vgg-19两个版本，vgg-19多了黑色的三个卷积层，分别代表19层带参数的网络层和16层带网络参数层。vgg获得了2014年ILSVRC比赛的第二名，参数太多，计算太复杂。<br>
-4.GoogLeNet<br>
-2014年ILSVRC比赛的第一名，有22层，但是参数数目却是vgg的1/20，AlexNet的1/12。主要是赫布理论指出可以用一个系数结构来代替稠密的参数。由此提出dropout等方法来进行参数的稀疏化。但是计算机的硬件和软件不能很好地计算稀疏结构，这不仅不会加快计算速度，反而给计算机造成更大地压力。所有GoogleNet想能不能用一个稠密结构覆盖(作用上等价)稀疏结构。(背后的数学原理很迷，反正是找到了一个Inception结构经过重复可以覆盖稀疏结构)。<br>
-<img src="https://secrul.github.io/post-images/1596545550571.png" alt="" loading="lazy"><br>
-但是呢，计算量太大了，就又提出了1x1的卷积，先将图像的channels数目减少，再进行3x3和5x5的卷积，得到了第二版本的Inception。<br>
-<img src="https://secrul.github.io/post-images/1596545727104.png" alt="" loading="lazy"><br>
-最后暴力concat，重复9遍，深度达到了22层。<br>
-<img src="https://secrul.github.io/post-images/1596545876839.jpg" alt="" loading="lazy"><br>
-为了避免过拟合，在较浅的网络层有两个辅助分类器，也采用了重叠池化策略。最后不仅深度大，参数少，性能还好。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[数据不平衡分类]]></title>
-        <id>https://secrul.github.io/post/shu-ju-bu-ping-heng-fen-lei/</id>
-        <link href="https://secrul.github.io/post/shu-ju-bu-ping-heng-fen-lei/">
-        </link>
-        <updated>2020-08-03T12:48:26.000Z</updated>
-        <content type="html"><![CDATA[<p>类别不平衡数据，如我现在正在做的医学图像分类，患病的正样本数据不足10%，用一般机器学习方法正确率可以达到90%多，但是正样本全部预测为了负样本。最常用的不平衡数据处理策略有五种：</p>
-<ol>
-<li>负样本下采样<br>
-1.1随机下采样<br>
-1.2在负样本中，取与最近3个正样本邻居均值距离最近的负样本<br>
-1.3在负样本中，取与所有正样本邻居均值距离最近的负样本<br>
-1.4取每一个正样本最近的三个负样本<br>
-1.5在负样本中，取与最近3个正样本邻居均值距离最远的负样本</li>
-<li>正样本上采样<br>
-1.1 随机复制正样本<br>
-1.2Synthetic Minority Oversampling Technique(SMOTE)：找到正样本点的k个正样本邻居，随机选择一个求线性平局点<br>
-1.3Borderline-SMOTE1：对于每个正样本求除其k个邻居(包括负样本)，统计邻居中正样本个数m，如果m=1，噪声点删除，m&lt;k/2进行smote扩展，m&gt;k/2忽略<br>
-1.4Borderline-SMOTE2：与Borderline-SMOTE2区别：对于m&lt;k/2的正样本点，从m个正样本挑出a比例点线性插值，从k-m个负样本点挑出1-a比例点线性插值</li>
-<li>更改损失评价函数，不要用正确率，<br>
-1.1F-score、Recall</li>
-<li>对于少数类可以增强权重</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[KNN]]></title>
-        <id>https://secrul.github.io/post/knn/</id>
-        <link href="https://secrul.github.io/post/knn/">
-        </link>
-        <updated>2020-08-01T02:44:33.000Z</updated>
-        <summary type="html"><![CDATA[<p>k-nearest neighbors，最近的k个邻居。顾名思义，就是按照一定的距离计算公式(最常用的就是欧式距离)挑选距离待分类点最近的k个邻居，然后按照人以类聚，物以群分的观点，认为待分类点的类别就是k个邻居中数目最多的类别。<br>
-<img src="https://secrul.github.io/post-images/1596453667678.png" alt="" loading="lazy"><br>
-当k是3的时候，</p>
-<ol>
-<li>计算待分类点和所有点的距离(可以是欧式距离)</li>
-<li>挑选距离待分类点最近的3个邻居，分别是三角形、三角形、正方形。</li>
-<li>然后按照类别进行统计，一个正方形，两个三角形，将数目最多的类别即三角形赋予待分类点。<br>
-由此，我们就认为待分类点是三角形。<br>
-当k是5的时候，发现最近的5个邻居分别是三角形、三角形、正方形、正方形、正方形。正方形的数目最多，所以将待分类点划分为正方形。<br>
-发现不同的k对应着不同的分类结果，所以k的选择至关重要。一般是要从3开始递增尝试。为了避免两类数目相同，二分类取3，5，7......选出最佳的k值。</li>
-</ol>
-]]></summary>
-        <content type="html"><![CDATA[<p>k-nearest neighbors，最近的k个邻居。顾名思义，就是按照一定的距离计算公式(最常用的就是欧式距离)挑选距离待分类点最近的k个邻居，然后按照人以类聚，物以群分的观点，认为待分类点的类别就是k个邻居中数目最多的类别。<br>
-<img src="https://secrul.github.io/post-images/1596453667678.png" alt="" loading="lazy"><br>
-当k是3的时候，</p>
-<ol>
-<li>计算待分类点和所有点的距离(可以是欧式距离)</li>
-<li>挑选距离待分类点最近的3个邻居，分别是三角形、三角形、正方形。</li>
-<li>然后按照类别进行统计，一个正方形，两个三角形，将数目最多的类别即三角形赋予待分类点。<br>
-由此，我们就认为待分类点是三角形。<br>
-当k是5的时候，发现最近的5个邻居分别是三角形、三角形、正方形、正方形、正方形。正方形的数目最多，所以将待分类点划分为正方形。<br>
-发现不同的k对应着不同的分类结果，所以k的选择至关重要。一般是要从3开始递增尝试。为了避免两类数目相同，二分类取3，5，7......选出最佳的k值。</li>
-</ol>
-<!-- more -->
-<p><a href="https://github.com/secrul/knn">python代码</a><br>
-KNN缺点：</p>
-<ol>
-<li>懒惰学习，速度较慢</li>
-<li>计算过程中需要存储整个训练样本，需要较大存储空间</li>
-<li>由于需要计算两两的距离，不适用于海量数据</li>
-<li>性能易受不平衡数据影响<br>
-KNN优点：</li>
-<li>思想简单、易懂</li>
-<li>不需要参数</li>
-<li>没有训练过程</li>
-<li>分类精度高</li>
-</ol>
-<p>注意点</p>
-<ol>
-<li>一般来说，距离越近的点类别相同的可能性越大。因此在统计k个邻居类别的时候权重不要都是1，可以是距离的倒数，较近的点权重大。</li>
-<li>对于不平衡数据：增大少数类的权重，尝试出最佳的k值和权重</li>
-<li>样本点过多：直接删除样本、聚类降维两个角度来减少样本数目</li>
-<li>距离：可以是欧式距离、内积、夹角余弦、马氏距离等</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[XShell 6建立会话两个问题记录]]></title>
-        <id>https://secrul.github.io/post/xshell-6-jian-li-hui-hua-liang-ge-wen-ti-ji-lu/</id>
-        <link href="https://secrul.github.io/post/xshell-6-jian-li-hui-hua-liang-ge-wen-ti-ji-lu/">
-        </link>
-        <updated>2020-07-31T11:20:18.000Z</updated>
-        <content type="html"><![CDATA[<p>#1.The remote SSH server rejected X11 forwarding request.<br>
-https://blog.csdn.net/wugenqiang/article/details/86554753<br>
-#2./usr/bin/xauth: file /root/.Xauthority does not exist<br>
-https://www.cnblogs.com/chenjo/p/12709785.html</p>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://secrul.github.io/tag/jnYtn-0kh/" class="tag">
+                    图像处理
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/linux-ming-ling-xing-mo-shi-yu-tu-xing-jie-mian-hu-zhuan/">
+                  <h3 class="post-title">
+                    戴尔linux命令行模式与图形界面互转
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

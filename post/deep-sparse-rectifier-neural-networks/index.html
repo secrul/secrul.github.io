@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Deep Sparse Rectiﬁer Neural Networks | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1596892458702">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="原文
+主要介绍了ReLu激活函数
+先是从神经科学方面发现了人脑神经元只有1%-4%是激活的，引申到深度网络也可以进行稀疏化。而ReLu的可以将一些神经元置为0来实现稀疏化。但是过度的稀疏，会反而降低网络的性能。
+
+神经科学发现，刺激低于一定..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1596892458702" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Deep Sparse Rectiﬁer Neural Networks</h2>
+            <div class="post-date">2020-08-05</div>
+            
+            <div class="post-content" v-pre>
+              <p><a href="http://proceedings.mlr.press/v15/glorot11a/glorot11a.pdf">原文</a><br>
+主要介绍了ReLu激活函数<br>
+先是从神经科学方面发现了人脑神经元只有1%-4%是激活的，引申到深度网络也可以进行稀疏化。而ReLu的可以将一些神经元置为0来实现稀疏化。但是过度的稀疏，会反而降低网络的性能。<br>
+<img src="https://secrul.github.io/post-images/1596607338427.png" alt="" loading="lazy"><br>
+神经科学发现，刺激低于一定阈值神经元不会响应。类比提出ReLu<br>
+<img src="https://secrul.github.io/post-images/1596607786450.png" alt="" loading="lazy"><br>
+softplus是ReLu的平滑版本。<br>
+稀疏性的优点：</p>
+<ol>
+<li>可以分离出关键特征，增加数据的鲁棒性</li>
+<li>数据的维度更随意，可以适应不同的精度</li>
+<li>更可能线性可分</li>
+<li>稠密分布包含着数据的主要特征，而稀疏数据来源于稠密数据，兼顾效率的同时也具备了上述优点<br>
+ReLu优势：</li>
+<li>相比于sigmoid和双边tanh，计算简单，并且稀疏了网络，并且不会出现梯度消失(sigmoid在无线大和无线小时会出现梯度消失)</li>
+<li>弥合了有预训练和没有预训练的差距，而sigmoid和双边tanh在没有预训练的模型中效果明显较差。在没有预训练时，ReLu性能相比优异。</li>
+<li>减少了监督学习和非监督学习的差距。</li>
+<li>0点处不能求导并不会导致不能后向传播降低性能，因为有L1正则化，所以也不会出现无穷大的神经元</li>
+</ol>
+<p>理想的稀疏率时50%~85%，超过85%会降低性能。<br>
+<strong>缺点</strong>：被置为0的神经元死亡后不会向后传递信息，且不会复活，即阻止了浅层信息向深层传播。<br>
+变体：</p>
+<ol>
+<li>Leaky ReLu 其中a是（1，+∞），人为指定，训练过程中不可以改变。这样避免了大部分神经元的死亡，也很难梯度爆炸<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&gt;0</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mi>x</mi><mi>a</mi></mfrac></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&lt;0</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">y = \begin{cases}
+x&amp; \text{x&gt;0}\\
+\frac{x}{a}&amp; \text{x&lt;0}
+\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&gt;0</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&lt;0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>PReLu<br>
+在Leaky ReLu基础上，a的值是根据数据来自动取的</li>
+<li>RReLu<br>
+在Leaky ReLU基础上，训练过程中a的值是一个从均匀分布(c,d)中随机取，测试中是一个定值</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/jue-ce-shu/">
+                  <h3 class="post-title">
+                    决策树
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
