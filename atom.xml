@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://secrul.github.io</id>
     <title>secrul</title>
-    <updated>2020-08-12T06:56:55.155Z</updated>
+    <updated>2020-08-16T12:19:05.237Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://secrul.github.io"/>
     <link rel="self" href="https://secrul.github.io/atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>https://secrul.github.io/images/avatar.png</logo>
     <icon>https://secrul.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, secrul</rights>
+    <entry>
+        <title type="html"><![CDATA[RNN、LSTM]]></title>
+        <id>https://secrul.github.io/post/rnnlstm/</id>
+        <link href="https://secrul.github.io/post/rnnlstm/">
+        </link>
+        <updated>2020-08-16T11:04:45.000Z</updated>
+        <content type="html"><![CDATA[<p>11</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[图像特征优化]]></title>
         <id>https://secrul.github.io/post/tu-xiang-te-zheng-you-hua/</id>
@@ -382,47 +391,6 @@ s(x, y)和t(x, y)分别代表着两个空间变换函数。当是线性失真的
         </link>
         <updated>2020-08-05T06:14:56.000Z</updated>
         <content type="html"><![CDATA[<p>1</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Deep Sparse Rectiﬁer Neural Networks]]></title>
-        <id>https://secrul.github.io/post/deep-sparse-rectifier-neural-networks/</id>
-        <link href="https://secrul.github.io/post/deep-sparse-rectifier-neural-networks/">
-        </link>
-        <updated>2020-08-05T03:35:55.000Z</updated>
-        <content type="html"><![CDATA[<p><a href="http://proceedings.mlr.press/v15/glorot11a/glorot11a.pdf">原文</a><br>
-主要介绍了ReLu激活函数<br>
-先是从神经科学方面发现了人脑神经元只有1%-4%是激活的，引申到深度网络也可以进行稀疏化。而ReLu的可以将一些神经元置为0来实现稀疏化。但是过度的稀疏，会反而降低网络的性能。<br>
-<img src="https://secrul.github.io/post-images/1596607338427.png" alt="" loading="lazy"><br>
-神经科学发现，刺激低于一定阈值神经元不会响应。类比提出ReLu<br>
-<img src="https://secrul.github.io/post-images/1596607786450.png" alt="" loading="lazy"><br>
-softplus是ReLu的平滑版本。<br>
-稀疏性的优点：</p>
-<ol>
-<li>可以分离出关键特征，增加数据的鲁棒性</li>
-<li>数据的维度更随意，可以适应不同的精度</li>
-<li>更可能线性可分</li>
-<li>稠密分布包含着数据的主要特征，而稀疏数据来源于稠密数据，兼顾效率的同时也具备了上述优点<br>
-ReLu优势：</li>
-<li>相比于sigmoid和双边tanh，计算简单，并且稀疏了网络，并且不会出现梯度消失(sigmoid在无线大和无线小时会出现梯度消失)</li>
-<li>弥合了有预训练和没有预训练的差距，而sigmoid和双边tanh在没有预训练的模型中效果明显较差。在没有预训练时，ReLu性能相比优异。</li>
-<li>减少了监督学习和非监督学习的差距。</li>
-<li>0点处不能求导并不会导致不能后向传播降低性能，因为有L1正则化，所以也不会出现无穷大的神经元</li>
-</ol>
-<p>理想的稀疏率时50%~85%，超过85%会降低性能。<br>
-<strong>缺点</strong>：被置为0的神经元死亡后不会向后传递信息，且不会复活，即阻止了浅层信息向深层传播。<br>
-变体：</p>
-<ol>
-<li>Leaky ReLu 其中a是（1，+∞），人为指定，训练过程中不可以改变。这样避免了大部分神经元的死亡，也很难梯度爆炸<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>x</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&gt;0</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mfrac><mi>x</mi><mi>a</mi></mfrac></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mtext>x&lt;0</mtext></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">y = \begin{cases}
-x&amp; \text{x&gt;0}\\
-\frac{x}{a}&amp; \text{x&lt;0}
-\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&gt;0</span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord text"><span class="mord">x&lt;0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
-<li>PReLu<br>
-在Leaky ReLu基础上，a的值是根据数据来自动取的</li>
-<li>RReLu<br>
-在Leaky ReLU基础上，训练过程中a的值是一个从均匀分布(c,d)中随机取，测试中是一个定值</li>
-</ol>
 ]]></content>
     </entry>
 </feed>
