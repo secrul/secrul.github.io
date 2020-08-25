@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SPP-Net | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="我们在用图像数据训练模型的时候，必须将图像裁剪成统一的大小。SPP-Net就是解决了这样一个问题，使用SPP-Net后，输入的图像数据不需要进行裁剪或者伸缩。但是同一个batch里的数据还是需要大小相同。
+之所以我们需要将数据预处理为相同的..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">SPP-Net</h2>
+            <div class="post-date">2020-08-24</div>
+            
+            <div class="post-content" v-pre>
+              <p>我们在用图像数据训练模型的时候，必须将图像裁剪成统一的大小。SPP-Net就是解决了这样一个问题，使用SPP-Net后，输入的图像数据不需要进行裁剪或者伸缩。但是同一个batch里的数据还是需要大小相同。<br>
+之所以我们需要将数据预处理为相同的大小，是因为全连接层需要指定输入的大小，这涉及到我们模型得参数设置。<br>
+<img src="https://secrul.github.io/post-images/1598273547488.png" alt="" loading="lazy"><br>
+下面来解释一些SPP-Net为什么可以做到：<br>
+假如我们需要全连接层的输入是21x1的tensor，SPP-Net的目标就是将一个不知大小的图像转化为21x1的tensor。<br>
+<img src="https://secrul.github.io/post-images/1598273741749.png" alt="" loading="lazy"><br>
+我们将21分解为16+4+1，然后用一个kernal_size为原图像大小的pooling层(可以是maxpooling、avgpooling)取样，同理用原图像大小二分之一和四分之一的pooling进行取样，得到4和16个数据，最后拼接即可。<br>
+**关键点：**使用kernal_size可变得pooling进行取样。POOLing层没有参数，所以可以设置为动态<br>
+缺点：和R-CNN一样，它的训练要经过多个阶段，特征也要存在磁盘中，另外，SPP中的微调只更新SPP层后面的全连接层，不适用于深层网络。<br>
+SPP-Net用于物体检测：</p>
+<ol>
+<li>和R-CNN一样，用Selective-search方法选出2000个候选框</li>
+<li>与R-CNN不同，不用Resize，整张图片直接卷积，得到一个feature map。然后根据候选框提取特征向量</li>
+<li>SVM分类，打分</li>
+<li>非极大值NMS分类</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/fast-r-cnn/">
+                  <h3 class="post-title">
+                    FAST R-CNN
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

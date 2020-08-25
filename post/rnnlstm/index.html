@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1597580338270">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
 <link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
 
 
@@ -24,8 +24,11 @@
 
 
 
-    <meta name="description" content="11
-" />
+    <meta name="description" content="入门博客：Andrej Karpathy blog、Understanding LSTM Networks
+相关paper：LSTM、 RNN经典论文 提取码: wbbs
+传统的卷积网络如下：
+
+虽然性能不错，但是面对视频、语音等有先后的序..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://secrul.github.io">
-        <img src="https://secrul.github.io/images/avatar.png?v=1597580338270" class="site-logo">
+        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
         <h1 class="site-title">secrul</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,7 +108,39 @@
             <div class="post-date">2020-08-16</div>
             
             <div class="post-content" v-pre>
-              <p>11</p>
+              <p>入门博客：<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">Andrej Karpathy blog</a>、<a href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/">Understanding LSTM Networks</a><br>
+相关paper：<a href="https://www.bioinf.jku.at/publications/older/2604.pdf">LSTM</a>、 <a href="https://pan.baidu.com/s/1bUC_gOr-fnCkBrhBOZB7Wg">RNN经典论文</a> 提取码: wbbs<br>
+传统的卷积网络如下：<br>
+<img src="https://secrul.github.io/post-images/1597593103124.jpg" alt="" loading="lazy"><br>
+虽然性能不错，但是面对视频、语音等有先后的序列数据时，不能很好地利用其内在地规律。例如在翻译时为了利用前面地语境来帮助后面单词的翻译，自然而然的就会想到将前面网络提取的特征传递到后面翻译的网络。但是这样子的话网络的层数不确定，于是引入循环结构。<br>
+<img src="https://secrul.github.io/post-images/1597593959440.jpg" alt="" loading="lazy"><br>
+为了便于理解，我们将循环结构展开：<br>
+<img src="https://secrul.github.io/post-images/1597595618949.png" alt="" loading="lazy"><br>
+这里循环的次数是一个超参数，time_steps由用户指定。<br>
+h1的计算公式如下：<br>
+<img src="https://secrul.github.io/post-images/1597596034281.png" alt="" loading="lazy"><br>
+同理可以计算h2-h4，因为是循环结构，这里的参数都是贡献的<br>
+<img src="https://secrul.github.io/post-images/1597596084740.png" alt="" loading="lazy"><br>
+然后计算输出值y1：<br>
+<img src="https://secrul.github.io/post-images/1597596123454.png" alt="" loading="lazy"><br>
+同样由于循环结构，参数贡献，每次更新的是同一个参数<br>
+<img src="https://secrul.github.io/post-images/1597596169436.png" alt="" loading="lazy"><br>
+以y4为例，进行梯度下降法后向传播：<br>
+<img src="https://secrul.github.io/post-images/1597596217922.png" alt="" loading="lazy"><br>
+如果每个因子都小于0，那么乘积会很接近于0，代表x1对于y4的贡献基本为0，y4也就忘记x1的存在。这也是RNN的一个致命缺点，可以参考这篇论文来理解。[梯度消失与梯度爆炸](On the difficulty of training recurrent neural networks)<br>
+虽然采取了截断等措施，但是效果不太好。知道LSTM的提出。<br>
+LSTM的思想就是忘记一些不重要的数据，来减少后向传播链的长度。<br>
+<img src="https://secrul.github.io/post-images/1597596460812.png" alt="" loading="lazy">、<br>
+引入了三个门，遗忘门、输入门、输出门。<br>
+<img src="https://secrul.github.io/post-images/1597596494582.png" alt="" loading="lazy"><br>
+遗忘门会评价前一个模块的输出特征和本次输入的相关程度，决定遗忘的程度，1代表完全记住，0代表完全遗忘。<br>
+<img src="https://secrul.github.io/post-images/1597596584385.png" alt="" loading="lazy"><br>
+输入门评估改block产生状态<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">C_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的可信程度<br>
+<img src="https://secrul.github.io/post-images/1597596689952.png" alt="" loading="lazy"><br>
+上次的状态和本次产生的状态加权后作为本次所产生的输出状态。<br>
+<img src="https://secrul.github.io/post-images/1597596753452.png" alt="" loading="lazy"><br>
+输出门会评估告诉下一个模块的信息量。<br>
+虽然LSTM可以忘记一些不重要的数据，但是当time_steps超过300的时候还是会出现梯度消失和梯度爆炸的蛮烦。</p>
 
             </div>
             

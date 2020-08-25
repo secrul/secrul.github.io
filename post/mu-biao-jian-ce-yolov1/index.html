@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>目标检测-YOLOV1 | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="#概要：
+我们提出了YOLO，一种新的物体检测算法。以前的物体检测都是用分类器来检测，相反，我们将物体检测看作为一个空间分割边界框和相关类概率的回归问题，单个的神经元网络在一次评估中直接从整幅图像中预测边界框和类的概率。因为整个检测过程只有..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">目标检测-YOLOV1</h2>
+            <div class="post-date">2020-08-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>#概要：<br>
+我们提出了YOLO，一种新的物体检测算法。以前的物体检测都是用分类器来检测，相反，我们将物体检测看作为一个空间分割边界框和相关类概率的回归问题，单个的神经元网络在一次评估中直接从整幅图像中预测边界框和类的概率。因为整个检测过程只有一个网络，在检测性能上可以优化为端到端的。<br>
+我们的架构极其快，基础版的YOLO模型可以实时处理图像，速度达到每秒45帧。一个简化版的快速YOLO处理速度可以达到惊人的155帧，并且mAP是其他实时物体检测模型的两倍。与目前最优异的物体检测模型相比，YOLO对物体的定位比较差，但会更少地预测出假阳物体。最后，YOLO是学习了物体地一般表现形式，当从自然图像推广到其他领域如艺术时，比其他的模型优异，包括DPM和R-CNN。<br>
+#导论：<br>
+人瞥一眼图片就马上知道图片上有什么，它们在哪个位置，它们之间如何互动的。人类的视觉系统很快并且很准，能够让我们完成一些复杂的任务，如无意识地开车。更快，更准确的物体检测算法可以让计算机不需要特别的传感器来开车，一些辅助设备传递更近实时的场景信息给用户，解锁更加一般的、响应式机器人系统。<br>
+当前的物体检测系统使用分类器来检测，为了检测物体，系统就用一个分类器在测试图像上 的不同位置来匹配不同大小的对应物体。像DPM模型用一个滑动窗口在整幅图像上均匀来分类。<br>
+最近的一些方法，如R-CNN使用“候选框”的方法先在图像上生成可能的分类框，然后对这些候选框进行分类。分完类后，一些处理方法用来去除重复的分类框，然后对于每个分类框进行打分。这些复杂的流程很慢，并且难以优化，因为每个独立的部分都要单独训练。<br>
+我们将物体检测任务看作一个回归问题，直接从图像像素得到分类框的坐标还有类别的可能性。使用我们的方法，只需要看图像一次就知道有什么物体，它们在哪里。<br>
+YOLO非常得快，参考图1，一个简单的卷积网络，<br>
+在YOLOV1之前，物体检测都是分为两个阶段，如R-CNN。第一阶段，生成一些候选区，第二阶段对这些候选区进行分析，去除不合格的选区，对剩下的选区分类。而YOLO只有一个阶段，</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/mu-biao-jian-ce-r-cnn/">
+                  <h3 class="post-title">
+                    目标检测——R-CNN
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
