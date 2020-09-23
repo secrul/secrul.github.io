@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>pix2pix | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="贡献：
+
+
+提出一个条件cGan来实现pix2pix的图像映射
+
+
+损失函数Gan+L1
+
+
+引入U-Net结构
+一般的图像处理任务都是将一幅图像转换为另一个相同结构的对应图像。如灰度图、彩色图之间的转换，图像去雾等。而对应的loss函数一..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">pix2pix</h2>
+            <div class="post-date">2020-09-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>贡献：</p>
+<ol>
+<li>
+<p>提出一个条件cGan来实现pix2pix的图像映射</p>
+</li>
+<li>
+<p>损失函数Gan+L1</p>
+</li>
+<li>
+<p>引入U-Net结构<br>
+一般的图像处理任务都是将一幅图像转换为另一个相同结构的对应图像。如灰度图、彩色图之间的转换，图像去雾等。而对应的loss函数一般都是缩小结果图域GT图之间的L1误差，或者L2误差，但是这样会导致结果图比较模糊。这类问题实质都是从像素到像素的映射，作者就基于Gan提出了一个通用的方法——PatchGan，来解决这一类问题，得到比较清晰的结果图像。<br>
+<img src="https://secrul.github.io/post-images/1600064839623.png" alt="" loading="lazy"><br>
+pix2pix是cGan，即条件Gan的一种，普通Gan是基于一个随机的噪声来生成图像，而cGan可以添加条件信息来指导图像的生成。具体思路如下图所示：<br>
+<img src="https://secrul.github.io/post-images/1600065209785.png" alt="" loading="lazy"><br>
+生成器G输入有两部分组成，条件输入x和随机噪声z(z用来扩充产生结果的多样性)，输入伪造的图像G(x,z)，而判别器D的目标就是区分开真实图像{x,y}和伪造图像{x,G(x,y)}，一般Gan的判别器只知道产生结果G(x),但是条件Gan的判别器D也知道条件输入x的存在。<br>
+目标函数如下：<br>
+<img src="https://secrul.github.io/post-images/1600066190128.png" alt="" loading="lazy"> 和普通Gan的目标类似，不过是加上了条件输入x。作者还发现附加上一个L2损失函数是有好处的，可以使得图像更清晰，与GT更接近，但是在论文中采用的是L1损失函数。<br>
+<img src="https://secrul.github.io/post-images/1600066731426.png" alt="" loading="lazy"><br>
+Gan的目标就是：<br>
+<img src="https://secrul.github.io/post-images/1600066953438.png" alt="" loading="lazy"></p>
+<p>而在生成器网络结构上也有改进：<br>
+<img src="https://secrul.github.io/post-images/1600067378297.png" alt="" loading="lazy"><br>
+参考了UNet结构<br>
+判别器采用PatchGAN，PatchGAN对输入图像的每个区域（patch）都输出一个预测概率值，相当于从判断输入是真还是假演变成判断输入的N*N大小区域是真还是假。举个例子，假设判别器的输入是1∗6∗256∗2561∗6∗256∗256，N设置为8，判别器的输出大小是1∗1∗32∗321∗1∗32∗32，其中32∗32大小的输出中的每个值都表示输入中对应8∗88∗8区域是真实的概率。<br>
+普通Gan的判别器是对于整幅图像打一个分，patchGan简单理解就是分块预测属于正样本的概率，分块打分，然后进行加权投票。这样可以反向追踪哪些区域被激活，适用于一些高分辨率，高细节的图像领域。</p>
+<p>优点：pix2pix巧妙的利用了GAN的框架来为“Image-to-Image translation”的一类问题提供了通用框架。利用U-Net提升细节，并且利用PatchGAN来处理图像的高频部分。<br>
+优点：pix2pix巧妙的利用了GAN的框架来为“Image-to-Image translation”的一类问题提供了通用框架。利用U-Net提升细节，并且利用PatchGAN来处理图像的高频部分。<br>
+缺点：训练需要大量的成对图片，比如白天转黑夜，则需要大量的同一个地方的白天和黑夜的照片。</p>
+</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/aspp/">
+                  <h3 class="post-title">
+                    aspp
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Densely Connected Convolutional Networks | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="贡献：
+1.缓解了梯度消失的问题
+2.增强了特征后向传播
+3.特征的再利用
+4.极大地减少了参数量
+
+借鉴了ResNet的思想，如图中所示，每一个layer与其后所有的layer都有一个连接，这也是dense的由来。但是此处是concate..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Densely Connected Convolutional Networks</h2>
+            <div class="post-date">2020-09-21</div>
+            
+            <div class="post-content" v-pre>
+              <p>贡献：<br>
+1.缓解了梯度消失的问题<br>
+2.增强了特征后向传播<br>
+3.<strong>特征的再利用</strong><br>
+4.极大地减少了参数量</p>
+<p><img src="https://secrul.github.io/post-images/1600751268381.png" alt="" loading="lazy"><br>
+借鉴了ResNet的思想，如图中所示，每一个layer与其后所有的layer都有一个连接，这也是dense的由来。但是此处是concatenate，而不是ResNet中的简单相加。这个方法极大的实现了特征的再利用，也缓解了梯度消失的问题。并且与ResNet相比，性能相似的时候网络的深度大大减少，参数数量也大大减少。<br>
+<img src="https://secrul.github.io/post-images/1600751772420.png" alt="" loading="lazy"><br>
+显示的是DenseNet在实际的应用，借鉴了ResBlock的概念，在每一个denseblock中的特征图的大小都是相同的，可以直接在channel上进行concat。<br>
+生长率Growth rate：如果denseblock的卷积是conv(in, out=k,stride,padding)，即每一个卷积都输出k个特征图，那么在第l层的卷积的输入就是(l - 1) * k + k0,输入就会很大，引入denseblock也是为了增大网络的深度，减少输入的channel数目。</p>
+<p>DenseBlock之间的非线性组合函数H包括BN+ReLU+3x3 Conv，为了进一步减少输入的channel，减少计算量，引入了1x1的卷积。中间过渡层H函数变为了BN+ReLU+1x1 Conv+BN+ReLU+3x3 Conv，称为DenseNet-B结构。<br>
+假定Transition的上接DenseBlock得到的特征图channels数为 m ，Transition层可以产生 [<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">\theta m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mord mathdefault">m</span></span></span></span>] 个特征（通过卷积层），其中 [<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span>] 是压缩系数（compression rate）。当 [<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span> = 1] 时，特征个数经过Transition层没有变化，即无压缩，而当压缩系数小于1时，这种结构称为DenseNet-C，文中使用 [<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\theta = 0.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span></span></span></span>] 。对于使用bottleneck层的DenseBlock结构和压缩系数小于1的Transition组合结构称为DenseNet-BC。<br>
+denseNet相比ResNet有着更少的参数，而在参数数目相同的情况下，性能有好于ResNet，但是计算过程中会消耗更多的显存，并没有ResNet知名。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/deep-networks-with-stochastic-depth/">
+                  <h3 class="post-title">
+                    Deep Networks with Stochastic Depth
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

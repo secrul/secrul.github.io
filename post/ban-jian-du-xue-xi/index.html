@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>半监督学习 | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+半监督学习：就是只有部分数据点被标记，而大部分数据点没有标记，介于非监督学习 和监督学习之间。让学习器不依赖外界交互，自动地利用 未标记样本来提升学习性能。
+最常见地就是“聚类假设”，即将样本点聚类，同一簇具有相同地类别。另一个就是“流形..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">半监督学习</h2>
+            <div class="post-date">2020-09-01</div>
+            
+            <div class="post-content" v-pre>
+              <ol>
+<li>半监督学习：就是只有部分数据点被标记，而大部分数据点没有标记，介于非监督学习 和监督学习之间。让学习器不依赖外界交互，自动地利用 未标记样本来提升学习性能。<br>
+最常见地就是“聚类假设”，即将样本点聚类，同一簇具有相同地类别。另一个就是“流形假设”，假设数据分布在一个流形结构上，邻近地样本具有相似地输出值。邻近程度用相似程度来刻画，流形假设可以看作聚类假设地推广，但是流形假设对输出值没有限制。<br>
+半监督学习还可以进一步划分为纯半监督学习和直推学习。<br>
+纯监督学习：利用标记数据和未标记数据训练模型，然后去预测<strong>另外的未标记数据</strong><br>
+直推学习：利用标记数据和未标记数据训练模型，然后去预测<strong>出现在训练集中的未标记数据</strong></li>
+<li>生成式方法：认为所有的数据都由一个含有参数的模型确定，通过EM极大似然法求解参数。不同的生成模型将产生不同的方法。</li>
+<li>半监督SVM：在不考虑未标记样本时，SVM试图找到醉倒的最大间隔划分超平面。在考虑了未标记样本后，S3VM试图找到能将两类样本分开，且穿过数据低密度区域的划分超平面。<br>
+TSVM：分别将所有的未标记点作为正例和反例进行划分，在所有划分超平面中选择间隔最大的一个。</li>
+<li>图半监督学习：</li>
+<li>基于分歧的方法：基于多学习器，学习器之间的分歧对未标记数据至关重要。多视图：指同一数据集的不同属性集合。不同分类器基于不同视图进行分类。</li>
+<li>半监督聚类：聚类就是无监督学习。加上一些约束就是半监督。一些数据点之间必定连接(比连)，数据点之间必定不相连(勿连约束)。</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/te-zheng-xuan-ze-he-xi-shu-xue-xi/">
+                  <h3 class="post-title">
+                    特征选择和稀疏学习
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

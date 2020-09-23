@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>角点检测算子——Moravec、Harris、SUSAN | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="什么是角点：
+如果一个点在其小邻域中具有两个明显不同的边缘方向，称之为角点。也有人将局部曲率较大的边缘点称之为角点。
+1.Moravec算子
+Moravec是一种基于灰度方差的角点检测算子，该算子计算图像中某个像素点沿着水平、垂直、对角线、..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">角点检测算子——Moravec、Harris、SUSAN</h2>
+            <div class="post-date">2020-09-12</div>
+            
+            <div class="post-content" v-pre>
+              <p>什么是角点：<br>
+如果一个点在其小邻域中具有两个明显不同的边缘方向，称之为角点。也有人将局部曲率较大的边缘点称之为角点。<br>
+1.Moravec算子<br>
+Moravec是一种基于灰度方差的角点检测算子，该算子计算图像中某个像素点沿着水平、垂直、对角线、反对角线四个方向的灰度方差，将其中的最小值选为该像素点的兴趣值，再通过局部非极大值抑制来检测是否为角点。</p>
+<ol>
+<li>一般选取邻域大小为5x5，对于一个像素点分别计算4个灰度的方差，并选其中最小的值作为像素的代表值</li>
+<li>选取一个经验阈值，筛选出一些代表值作为候选特征值</li>
+<li>设定一个邻域大小，利用NMS算法，选出该邻域最大的特征值作为最终的特征值，去除多余的候选特征值<br>
+优点：计算速度快<br>
+缺点：对图像边缘和噪声敏感，并且有方向上的局限性<br>
+2.Harris算子<br>
+原理：直观的来看，角点处像素点的灰度值变换比较大。<br>
+<img src="https://secrul.github.io/post-images/1599899093814.png" alt="" loading="lazy">，计算一个方形邻域灰度值的均值，如果是平坦区域均值变化很缓慢，如果是边界，均值只会在垂直于边界的方向上迅速变化。如果是角点，则均值对于任何方向变化都很大。<br>
+Harris的改进：</li>
+<li>Moravec算子只是考虑了8个方向，但是Harris用Taylor展开去近似任意方向。</li>
+<li>Moravec算子使用的是方框，权值都是1，容易受到噪声影响，而harris使用高斯函数来加权。<br>
+原理：<br>
+对于每个像素点，规定了一个方形邻域，计算灰度差值：<br>
+<img src="https://secrul.github.io/post-images/1599899224055.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899230495.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899253135.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899260785.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899273199.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899279572.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599899286722.png" alt="" loading="lazy"><br>
+算法流程：</li>
+<li>利用水平，竖直差分算子对图像的每个像素进行滤波以求得Ix,Iy,进而求得M中的四个元素的值</li>
+<li>对M的四个元素进行高斯平滑滤波，为的是消除一些不必要的孤立点和凸起，得到新的矩阵M</li>
+<li>接下来利用M计算对应每个像素的角点响应函数R</li>
+<li>局部极大值抑制，同时选取其极大值</li>
+<li>在矩阵R中，同时满足R(i,j)大于一定阈值threshold和R(i,j)是某领域内的局部极大值，则被认为是角点<br>
+优点：旋转不变性<br>
+缺点：计算量大，尺度敏感<br>
+3.SUSAN算子<br>
+<img src="https://secrul.github.io/post-images/1599899766863.png" alt="" loading="lazy"><br>
+圆形邻域，设定一个阈值，根据圆心和邻域内像素值灰度的插值确定模板填充0或者1.<br>
+然后计算圆形邻域的的重心以及朝向。</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/simulated-and-unsupervised/">
+                  <h3 class="post-title">
+                    Simulated and Unsupervised 
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

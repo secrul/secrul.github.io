@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>aspp | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="a表示Atrous，意思是空洞。spp就是 spatial pyramid pooling 。论文中提出的结构就是：
+** 将spp-Net中的pooling操作，改为了空洞卷积，来进行采样操作。**
+论文贡献：
+
+使用空洞卷积来进行上采样..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">aspp</h2>
+            <div class="post-date">2020-09-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>a表示Atrous，意思是空洞。spp就是 spatial pyramid pooling 。论文中提出的结构就是：<br>
+** 将spp-Net中的pooling操作，改为了空洞卷积，来进行采样操作。**<br>
+论文贡献：</p>
+<ol>
+<li>使用空洞卷积来进行上采样来进行密集的预测任务。空洞卷积可以在不增加参数量的基础上增大filter的感受野，从而可以得到更多的语义信息。</li>
+<li>空洞空间金字塔池化结构（ASPP）从而以多尺寸来分割目标物体。通过不同sample rates的filters及不同大小的感受野，来获得多尺寸下的语义信息</li>
+<li>结合DCNN与概率模型提高物体的检测边界。DCNNs+CRF</li>
+</ol>
+<p>DCNN应用于分割的三个挑战：</p>
+<ol>
+<li>feature 分辨率的减少</li>
+<li>不同尺寸的目标物</li>
+<li>由于DCNN的不变性导致分割边界的不精确。<br>
+提出的三个对策：</li>
+<li>将DCNN最后几个maxpooling去掉，在后续的卷积层中添加更高sample rate的空洞卷积。结合空洞卷积与双线性插值将feature map 还原为原图大小</li>
+<li>一个标准方式是将图片处理成相同的尺寸，然后融合特征与score maps，但会引入大量的计算。受到空间金字塔池化启发，对feature map以多rates 进行卷积，增强了感受野，该文对一张图片平行的使用不同sample rate 的空洞卷积层（ASPP）</li>
+<li>一个对应物体中心的分类器，要求对空间的一些旋转等变换有类别不变性，一种方式是在进行最终的分割预测时通过跳跃连接不同层的 features 来获得潜在信息。本文，作者是用了一个全连接的CRF来改善模型对边界的分割<br>
+DeepLab system 的优势：</li>
+<li>速度</li>
+<li>准确率</li>
+<li>简单<br>
+空洞卷积(膨胀卷积)：<br>
+空洞卷积可以使用较少的参数，获取较大的感受野<br>
+<img src="https://secrul.github.io/post-images/1599734881629.png" alt="" loading="lazy"><br>
+一维空洞卷积</li>
+</ol>
+<p><img src="https://secrul.github.io/post-images/1599734953629.png" alt="" loading="lazy"><br>
+可以看到同样的九个参数，利用空洞卷积获得了较大的感受野<br>
+<img src="https://secrul.github.io/post-images/1599735011836.png" alt="" loading="lazy"><br>
+空洞中用0填充</p>
+<p><strong>全连接CRF</strong><br>
+DCNN中的一个固有弊端是<strong>位置的准确性</strong>与<strong>分类的效果</strong>之间的矛盾， 带有池化层越深的模型其分类效果越好，但 持续增加的不变性与较大的感受野只会使结果更加平滑，但无法使边界更加分明。<br>
+针对边界问题的方法，一是可以利用网络中多层feature map以便更好的进行边界分割。另一种方法是可以引入超像素表示，将边界任务交给较低级的分割方法处理。该文结合DCNN的识别能力与全连接CRF较高的分界效果。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/cyclegan/">
+                  <h3 class="post-title">
+                    cycleGan
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

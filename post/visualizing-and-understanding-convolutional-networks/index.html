@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Visualizing and Understanding Convolutional Networks | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+提出了一种CNN的可视化方法。虽然CNN很搞笑，但是始终是一个黑盒子，我们提出一个模型只能通过试错来进行。可视化后可以帮助理解CNN，也可以借此来进一步优化一些CNN的结构。
+思路就是CNN网络从一幅图像得到一个向量后，在逆回去得到一幅图..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Visualizing and Understanding Convolutional Networks</h2>
+            <div class="post-date">2020-09-06</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://secrul.github.io/post-images/1599391324752.png" alt="" loading="lazy"><br>
+提出了一种CNN的可视化方法。虽然CNN很搞笑，但是始终是一个黑盒子，我们提出一个模型只能通过试错来进行。可视化后可以帮助理解CNN，也可以借此来进一步优化一些CNN的结构。<br>
+思路就是CNN网络从一幅图像得到一个向量后，在逆回去得到一幅图像。怎么逆回去的：</p>
+<ol>
+<li>逆池化：在最大值池化中记录每个最大值的位置，然后将这些最大值填回到原始位置，就得到一个稀疏的大尺寸向量</li>
+<li>逆ReLU：还是采用ReLU</li>
+<li>逆卷积：还是采用正向卷进的卷积核，将之转置后进行卷积操作。一个像素点是很多像素点的加权和，按照权重退还给每个像素点<br>
+论文中基于AlexNet。通过可视化发现：<br>
+第一层得到了一些高频信息。<br>
+第二层得到了角落、边缘信息<br>
+第三层得到了复杂的纹理信息<br>
+第四层获得了局部的类别信息，如狗的脸，鸟的腿<br>
+第五层得到了完整的高层信息<br>
+通过调小卷积核的大小，减小步距，可以优化网络</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/learning-deconvolution-network-for-semantic-segmentation/">
+                  <h3 class="post-title">
+                    Learning Deconvolution Network for Semantic Segmentation
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

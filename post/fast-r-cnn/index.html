@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
 <link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
 
 
@@ -24,8 +24,8 @@
 
 
 
-    <meta name="description" content="1
-" />
+    <meta name="description" content="融合了R-CNN和SPP-Net的思想。
+作者先解释了为什么SPP-Net不能高效的进行后向传播来优化参数？因为每个训练样本都来自不同的图片，并且所有候选区的特征向量都被存储在硬盘，然后SVM分类。当同一个batch的特征向量来自不同图像的..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +35,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://secrul.github.io">
-        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
         <h1 class="site-title">secrul</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,7 +105,17 @@
             <div class="post-date">2020-08-24</div>
             
             <div class="post-content" v-pre>
-              <p>1</p>
+              <p>融合了R-CNN和SPP-Net的思想。<br>
+作者先解释了为什么SPP-Net不能高效的进行后向传播来优化参数？因为每个训练样本都来自不同的图片，并且所有候选区的特征向量都被存储在硬盘，然后SVM分类。当同一个batch的特征向量来自不同图像的时候，需要同时计算和存储图像的Feature Map。而所提出的Fast R-CNN先采用N张图像，然后从N张图像中选出R个ROI，同一图像的ROI共享计算和内存。论文中训练时每个批次两个图像，128个ROI，其中25%的ROI是正例，取自IOU大于0.5的候选区，其余75%是反例背景，取自IOU介于0.1到0.5的候选区。测试时每个图像2000个ROI。<br>
+相对于R-CNN的改进之处：<br>
+1、卷积不再是对每个region proposal进行，而是直接对整张图像，这样减少了很多重复计算。原来RCNN是对每个region proposal分别做卷积，因为一张图像中有2000左右的region proposal，肯定相互之间的重叠率很高，因此产生重复计算。<br>
+2、用ROI pooling进行特征的尺寸变换，而不是直接Resize，借鉴的SPP-Net<br>
+3、将regressor放进网络一起训练，每个类别对应一个regressor，同时用softmax代替原来的SVM分类器。<br>
+损失函数：分类损失和位置回归损失融合<br>
+<img src="https://secrul.github.io/post-images/1599122544586.png" alt="" loading="lazy"><br>
+当是正例，u为1，背景的时候为0<br>
+<img src="https://secrul.github.io/post-images/1599123763765.png" alt="" loading="lazy"><br>
+<img src="https://secrul.github.io/post-images/1599123774854.png" alt="" loading="lazy"></p>
 
             </div>
             

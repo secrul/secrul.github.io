@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>cycleGan | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="主要贡献：
+提出了在没有成对训练数据的基础之上的图像到图像的映射网络——cycleGan
+主要方法就是一个循环结构，这可能也是cycle的由来。
+
+从X到Y的映射，G是生成器，Dy是对应的判别器。从Y到X的映射中F是生成器，Dx是对应判别器..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">cycleGan</h2>
+            <div class="post-date">2020-09-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>主要贡献：<br>
+提出了在没有成对训练数据的基础之上的图像到图像的映射网络——cycleGan<br>
+主要方法就是一个循环结构，这可能也是cycle的由来。<br>
+<img src="https://secrul.github.io/post-images/1599528888099.png" alt="" loading="lazy"><br>
+从X到Y的映射，G是生成器，Dy是对应的判别器。从Y到X的映射中F是生成器，Dx是对应判别器。通过这个循环结构建立一个双射，间接构成成对的训练数据。<br>
+<img src="https://secrul.github.io/post-images/1599529086912.png" alt="" loading="lazy"><br>
+可以看到，由X-&gt;Y的映射中，由G生成Y的一个估计值，再通过F将这个估计值作为输入，生成X的估计值X',我们将X和X'的误差作为衡量Cycle Consistency的一个损失函数。同理定义Y和Y'的Cycle Consistency的损失函数，这样子确保是一个双射。<br>
+损失函数：<br>
+<img src="https://secrul.github.io/post-images/1599531067331.png" alt="" loading="lazy"><br>
+前一项是两个Gan的损失函数，后一项是Cycle Consistency的损失函数。<br>
+<img src="https://secrul.github.io/post-images/1599531204459.png" alt="" loading="lazy"><br>
+对于每一个Gan来说，损失函数不采用对数，而是采用L2范数，论文中这样更稳定，结果更好</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/visualizing-and-understanding-convolutional-networks/">
+                  <h3 class="post-title">
+                    Visualizing and Understanding Convolutional Networks
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

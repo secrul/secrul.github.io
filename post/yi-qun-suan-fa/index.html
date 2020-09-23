@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>蚁群算法 | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="路线A和路线B，A的路程大于B。假如一半蚂蚁选择走路线A，一半蚂蚁选择走路线B，那么路线B上蚂蚁留下信息素的浓度就高于路线A的浓度。下一轮选择时就会有更多的蚂蚁选择走路线B，经过调节，最终所有的蚂蚁都会选择走路线B。从而实现最优路线选择。
+..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">蚁群算法</h2>
+            <div class="post-date">2020-08-28</div>
+            
+            <div class="post-content" v-pre>
+              <pre><code>路线A和路线B，A的路程大于B。假如一半蚂蚁选择走路线A，一半蚂蚁选择走路线B，那么路线B上蚂蚁留下信息素的浓度就高于路线A的浓度。下一轮选择时就会有更多的蚂蚁选择走路线B，经过调节，最终所有的蚂蚁都会选择走路线B。从而实现最优路线选择。
+对于不同的问题，需要建立不同的蚁群算法模型。下面以旅行商TSP问题为例：
+参数：
+1. 蚂蚁数量m，城市数量M。一般将m = 1.5M。若m过大，会使得路径上的信息素趋于平均，正反馈作用减弱，收敛速度慢。如果m过小，大量的路径信息素为0，难以获得全局最优解。
+2. 信息素因子：信息素$\alpha$反应了蚂蚁在运动中所积累的信息量在知道蚁群搜索过程中的相对权值。$\alpha$过大，随机性就弱，蚂蚁倾向于走以前经过的路径，反之，随机性强，等同于贪婪算法，会陷入局部最优。一般取[1,4]
+3. 启发函数因子：启发函数因子$\beta$反应了启发式信息在指导蚂蚁搜索过程中的相对重要程度。其大小反应了蚁群寻优过程中先验性、确定性因素的作用程度。$\beta$过大，蚂蚁会在某个局部点选择局部最优。$\beta$过小会陷入纯粹的随机搜索。一般取[3, 4.5]
+4. 信息素挥发因子p：信息素衰减的速度。当p过小，收敛速度慢，过大则会重复搜索。【0.2, 0.5】
+5. 信息素常数Q：表示蚂蚁循环一周在路径上释放的信息素总量，Q越大，则路径上信息素越多，有助于收敛。
+6. 最小迭代次数：100-500</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/mo-ni-tui-huo-suan-fa/">
+                  <h3 class="post-title">
+                    模拟退火算法
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

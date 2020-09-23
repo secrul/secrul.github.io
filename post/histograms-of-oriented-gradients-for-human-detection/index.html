@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
 <link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
 
 
@@ -24,9 +24,12 @@
 
 
 
-    <meta name="description" content="1
-" />
-    <meta name="keywords" content="" />
+    <meta name="description" content="与SIFT算法原理类似，都是利用方向梯度直方图信息。不过HOG是用于图像识别，而SIFT是用于图像间关键点的映射。
+
+将输入的彩色图像转为灰度图
+用Gamma校正对图像颜色进行归一化，目的是去除局部阴影和光照造成的影响，抑制噪音
+计算图像每..." />
+    <meta name="keywords" content="机器学习,目标检测" />
   </head>
   <body>
     <div id="app" class="main">
@@ -35,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://secrul.github.io">
-        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
         <h1 class="site-title">secrul</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,9 +108,30 @@
             <div class="post-date">2020-08-23</div>
             
             <div class="post-content" v-pre>
-              <p>1</p>
+              <p>与SIFT算法原理类似，都是利用方向梯度直方图信息。不过HOG是用于图像识别，而SIFT是用于图像间关键点的映射。</p>
+<ol>
+<li>将输入的彩色图像转为灰度图</li>
+<li>用Gamma校正对图像颜色进行归一化，目的是去除局部阴影和光照造成的影响，抑制噪音</li>
+<li>计算图像每个像素点的梯度，为了捕获轮廓信息</li>
+<li>将梯度映射到单元梯度方向(论文中选取了9个单元梯度)，进行编码</li>
+<li>将若干像素点作为一个单元格，一般取6x6-8x8，使用直方图统计梯度</li>
+<li>若干单元格组成一个块，一般2x2个单元格，块与块之间的距离自由设置，一般为块边长的一半。对每个块内单元的直方图进行归一化</li>
+<li>将所有块中所有的直方图收集到HOG特征向量中，基于这个向量使用SVM进行分类</li>
+</ol>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://secrul.github.io/tag/7w2WJi16d/" class="tag">
+                    机器学习
+                  </a>
+                
+                  <a href="https://secrul.github.io/tag/S977zARYw/" class="tag">
+                    目标检测
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1598321971570">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
 <link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
 
 
@@ -26,7 +26,7 @@
 
     <meta name="description" content="我们在用图像数据训练模型的时候，必须将图像裁剪成统一的大小。SPP-Net就是解决了这样一个问题，使用SPP-Net后，输入的图像数据不需要进行裁剪或者伸缩。但是同一个batch里的数据还是需要大小相同。
 之所以我们需要将数据预处理为相同的..." />
-    <meta name="keywords" content="" />
+    <meta name="keywords" content="目标检测,深度学习" />
   </head>
   <body>
     <div id="app" class="main">
@@ -35,7 +35,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://secrul.github.io">
-        <img src="https://secrul.github.io/images/avatar.png?v=1598321971570" class="site-logo">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
         <h1 class="site-title">secrul</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,12 +117,24 @@
 SPP-Net用于物体检测：</p>
 <ol>
 <li>和R-CNN一样，用Selective-search方法选出2000个候选框</li>
-<li>与R-CNN不同，不用Resize，整张图片直接卷积，得到一个feature map。然后根据候选框提取特征向量</li>
+<li>与R-CNN不同，不用Resize，整张图片直接卷积，得到一个feature map。然后根据候选框提取特征向量，并存储</li>
 <li>SVM分类，打分</li>
 <li>非极大值NMS分类</li>
 </ol>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://secrul.github.io/tag/S977zARYw/" class="tag">
+                    目标检测
+                  </a>
+                
+                  <a href="https://secrul.github.io/tag/wT6cmH0fq/" class="tag">
+                    深度学习
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">

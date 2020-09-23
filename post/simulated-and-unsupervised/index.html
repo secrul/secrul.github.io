@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Simulated and Unsupervised  | secrul</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://secrul.github.io/favicon.ico?v=1600838194466">
+<link rel="stylesheet" href="https://secrul.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="由于数据集标注很昂贵，一般的合成图像和真实图像之间存在着一个差异，而这个差异可能会影响一些任务的正常进行。作者提出了SimGan来缩小合成图像和真实图像之间的差距。
+SimGan可以看作是一个GAN + Discriminator
+
+Sim..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://secrul.github.io">
+        <img src="https://secrul.github.io/images/avatar.png?v=1600838194466" class="site-logo">
+        <h1 class="site-title">secrul</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            文章
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/secrul" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      &copy 2020 by secrul. All rights reserved. | <a class="rss" href="https://secrul.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Simulated and Unsupervised </h2>
+            <div class="post-date">2020-09-08</div>
+            
+            <div class="post-content" v-pre>
+              <p>由于数据集标注很昂贵，一般的合成图像和真实图像之间存在着一个差异，而这个差异可能会影响一些任务的正常进行。作者提出了SimGan来缩小合成图像和真实图像之间的差距。<br>
+SimGan可以看作是一个GAN + Discriminator<br>
+<img src="https://secrul.github.io/post-images/1599827658256.png" alt="" loading="lazy"><br>
+SimGan由两部分组成，由R(Refiner network) 和 D(Discriminator network)组成。和传统GAN不同的，它的input是合成图片(synthetic image)，而不是random noise，经过Refiner之后产生refined image，然后再将real image和refined image送入Discriminator。<br>
+创新点：</p>
+<ol>
+<li>self-regularization loss用来进一步保证refined images和synthetic images注释信息不变</li>
+<li>local adversarial loss是为了避免GAN中的Discriminator过强导致生成假的图片，让D网络对图片的局部进行损失计算，而不是整张图片直接计算，这样也使得每张图片有多个损失函数值（multiple local adversarial losses per image</li>
+<li>using a history of refined images 是为了保证D网络的稳定性，使用历史记录的refined图片更新D，而不仅仅是传统GAN网络每次提供的图片来更新。<br>
+Refiner network<br>
+<img src="https://secrul.github.io/post-images/1599967741582.png" alt="" loading="lazy"><br>
+公式一是R网络的损失函数，但只给出了目标，前半部分是保证refined图片尽可能地像真实的图片，第二部分是保证refined图片保留原有的注释信息<br>
+<img src="https://secrul.github.io/post-images/1599967807766.png" alt="" loading="lazy"><br>
+关于D的损失函数，通过最小化该函数实现目标，第一部分是希望refined图片尽可能真，第二部分希望未标注真实图片输入后值尽可能小。这个的loss与原始GAN的D的loss刚好相反，原始GAN的D希望real图片尽可能为真，generated图片尽可能为假。也许是这样才能保证refined图片更加真实<br>
+<img src="https://secrul.github.io/post-images/1599967925489.png" alt="" loading="lazy"><br>
+R网络具体的损失函数，第一部分通过最小化该函数，利用已经训练过的D来更新R网络，保证refined图片与原始合成图片不同；第二部分是自动正则化部分（self-regularization）在像素级（进行特征提取后）确保refinged的图片与原始synthetic图片的注释信息不变。<br>
+局部对抗损失函数：<br>
+本文中提出在训练过程中Refiner网络经常会局限于图片的某一特征，重点放在一个区域来欺骗D网络，忽视了整张图片的特征。因此提出了local adversarial loss保证refined图片的每一个区域都应该趋向于真实的图片。<br>
+<img src="https://secrul.github.io/post-images/1599969140623.png" alt="" loading="lazy"><br>
+具体来说，并不是定义一个全局的判别器，而是定义一个判别器去分别判别图片的每一个区域。D网络输出WxH个区域的值，然后将每个区域进行交叉熵计算，并进行累加，从而提高整个网络的性能。<br>
+<strong>使用一系列使用过的refined图片来更新Discriminator</strong><br>
+在对抗训练中存在着另外一个问题就是D网络只会注意到最新的refined图片，这会导致一是整个训练的发散；二是R网络会生成重复的图片，但是D网络已经忘记了。对于判别器而言，任何时候R网络生成的图片都应该判别为假，基于此，本文提出了用之前训练过的refined图片来再次更新Discriminator。<br>
+作者通过为之前生成的refined图片设置一缓存区，B为缓存区图片的数量，b为每次batch的大小。在每轮D的训练过程中，使用b/2的当前生成的图片和b/2的缓存区的图片来计算loss，更新参数。训练过程始终保持B的数量固定，每次训练结束用随机的b/2的新生成的refined图片来替换缓存区的图片。具体如下图所示。<br>
+<img src="https://secrul.github.io/post-images/1599969540195.png" alt="" loading="lazy"></li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://secrul.github.io/post/pix2pix/">
+                  <h3 class="post-title">
+                    pix2pix
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
